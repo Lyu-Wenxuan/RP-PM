@@ -1,5 +1,6 @@
 # RP-PM
 《软件开发过程与项目管理》综合实践项目：培训信息管理系统
+系统成功实现了培训信息管理的各项功能，包括讲师管理、课程管理、学员报名、签到、缴费和课程评价等
 ![图片1](https://github.com/user-attachments/assets/44aab444-70cc-4d31-9ddd-aea31c47f86d)
 图1 学员注册功能UI界面截图
 ![学员查看培训通知功能UI界面截图](https://github.com/user-attachments/assets/c429b57b-828f-4b0e-9dad-a767c907fbac)
