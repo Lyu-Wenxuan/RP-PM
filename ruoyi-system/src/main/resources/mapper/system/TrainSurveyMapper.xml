@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TrainSurveyMapper">
+    
+    <resultMap type="TrainSurvey" id="TrainSurveyResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="rating"    column="rating"    />
+        <result property="comment"    column="comment"    />
+        <result property="advice"    column="advice"    />
+    </resultMap>
+
+    <sql id="selectTrainSurveyVo">
+        select id, student_name, course_name, rating, comment, advice from train_survey
+    </sql>
+
+    <select id="selectTrainSurveyList" parameterType="TrainSurvey" resultMap="TrainSurveyResult">
+        <include refid="selectTrainSurveyVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainSurveyById" parameterType="Long" resultMap="TrainSurveyResult">
+        <include refid="selectTrainSurveyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTrainSurvey" parameterType="TrainSurvey" useGeneratedKeys="true" keyProperty="id">
+        insert into train_survey
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="rating != null">rating,</if>
+            <if test="comment != null">comment,</if>
+            <if test="advice != null">advice,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="rating != null">#{rating},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="advice != null">#{advice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainSurvey" parameterType="TrainSurvey">
+        update train_survey
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="rating != null">rating = #{rating},</if>
+            <if test="comment != null">comment = #{comment},</if>
+            <if test="advice != null">advice = #{advice},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTrainSurveyById" parameterType="Long">
+        delete from train_survey where id = #{id}
+    </delete>
+
+    <delete id="deleteTrainSurveyByIds" parameterType="String">
+        delete from train_survey where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

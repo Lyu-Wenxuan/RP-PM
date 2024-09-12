@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TrainApplicationMapper">
+    
+    <resultMap type="TrainApplication" id="TrainApplicationResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="username"    column="username"    />
+        <result property="course"    column="course"    />
+        <result property="company"    column="company"    />
+        <result property="position"    column="position"    />
+        <result property="skill"    column="skill"    />
+        <result property="appTime"    column="app_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectTrainApplicationVo">
+        select id, type, student_id, username, course, company, position, skill, app_time, status from train_application
+    </sql>
+
+    <select id="selectTrainApplicationList" parameterType="TrainApplication" resultMap="TrainApplicationResult">
+        <include refid="selectTrainApplicationVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="course != null  and course != ''"> and course = #{course}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+            <if test="skill != null  and skill != ''"> and skill = #{skill}</if>
+            <if test="appTime != null "> and app_time = #{appTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainApplicationById" parameterType="Long" resultMap="TrainApplicationResult">
+        <include refid="selectTrainApplicationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTrainApplication" parameterType="TrainApplication" useGeneratedKeys="true" keyProperty="id">
+        insert into train_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="username != null">username,</if>
+            <if test="course != null">course,</if>
+            <if test="company != null">company,</if>
+            <if test="position != null">position,</if>
+            <if test="skill != null">skill,</if>
+            <if test="appTime != null">app_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="username != null">#{username},</if>
+            <if test="course != null">#{course},</if>
+            <if test="company != null">#{company},</if>
+            <if test="position != null">#{position},</if>
+            <if test="skill != null">#{skill},</if>
+            <if test="appTime != null">#{appTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainApplication" parameterType="TrainApplication">
+        update train_application
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="course != null">course = #{course},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="skill != null">skill = #{skill},</if>
+            <if test="appTime != null">app_time = #{appTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTrainApplicationById" parameterType="Long">
+        delete from train_application where id = #{id}
+    </delete>
+
+    <delete id="deleteTrainApplicationByIds" parameterType="String">
+        delete from train_application where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

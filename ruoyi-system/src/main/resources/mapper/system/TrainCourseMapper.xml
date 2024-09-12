@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TrainCourseMapper">
+    
+    <resultMap type="TrainCourse" id="TrainCourseResult">
+        <result property="id"    column="id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="trainer"    column="trainer"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="coursePrice"    column="course_price"    />
+        <result property="isDel"    column="is_del"    />
+    </resultMap>
+
+    <sql id="selectTrainCourseVo">
+        select id, course_name, trainer, start_date, end_date, course_price, is_del from train_course
+    </sql>
+
+    <select id="selectTrainCourseList" parameterType="TrainCourse" resultMap="TrainCourseResult">
+        <include refid="selectTrainCourseVo"/>
+        <where>  
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="isDel != null "> and is_del = #{isDel}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainCourseById" parameterType="Long" resultMap="TrainCourseResult">
+        <include refid="selectTrainCourseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTrainCourse" parameterType="TrainCourse" useGeneratedKeys="true" keyProperty="id">
+        insert into train_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">course_name,</if>
+            <if test="trainer != null">trainer,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="coursePrice != null">course_price,</if>
+            <if test="isDel != null">is_del,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="trainer != null">#{trainer},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="coursePrice != null">#{coursePrice},</if>
+            <if test="isDel != null">#{isDel},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainCourse" parameterType="TrainCourse">
+        update train_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">course_name = #{courseName},</if>
+            <if test="trainer != null">trainer = #{trainer},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="coursePrice != null">course_price = #{coursePrice},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTrainCourseById" parameterType="Long">
+        delete from train_course where id = #{id}
+    </delete>
+
+    <delete id="deleteTrainCourseByIds" parameterType="String">
+        delete from train_course where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

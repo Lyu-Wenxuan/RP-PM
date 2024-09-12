@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TrainIncomeMapper">
+
+    <resultMap type="TrainIncome" id="TrainIncomeResult">
+        <result property="id"    column="id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="number"    column="number"    />
+        <result property="price"    column="price"    />
+        <result property="totalPrice"    column="total_price"    />
+    </resultMap>
+
+    <sql id="selectTrainIncomeVo">
+        select id, course_name, number, price, total_price from train_income
+    </sql>
+
+    <select id="selectTrainIncomeList" parameterType="TrainIncome" resultMap="TrainIncomeResult">
+        <include refid="selectTrainIncomeVo"/>
+        <where>
+            <if test="courseName != null  and courseName != ''"> and course_name = #{courseName}</if>
+            <if test="number != null "> and `number` = #{number}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="totalPrice != null "> and total_price = #{totalPrice}</if>
+        </where>
+    </select>
+
+    <select id="selectTrainIncomeById" parameterType="Long" resultMap="TrainIncomeResult">
+        <include refid="selectTrainIncomeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTrainIncome" parameterType="TrainIncome" useGeneratedKeys="true" keyProperty="id">
+        insert into train_income
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseName != null">course_name,</if>
+            <if test="number != null">number,</if>
+            <if test="price != null">price,</if>
+            <if test="totalPrice != null">total_price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseName != null">#{courseName},</if>
+            <if test="number != null">#{number},</if>
+            <if test="price != null">#{price},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainIncome" parameterType="TrainIncome">
+        update train_income
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTrainIncomeById" parameterType="Long">
+        delete from train_income where id = #{id}
+    </delete>
+
+    <delete id="deleteTrainIncomeByIds" parameterType="String">
+        delete from train_income where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

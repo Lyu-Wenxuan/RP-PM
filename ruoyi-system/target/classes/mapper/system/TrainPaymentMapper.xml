@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TrainPaymentMapper">
+    
+    <resultMap type="TrainPayment" id="TrainPaymentResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="coursePrice"    column="course_price"    />
+        <result property="payName"    column="pay_name"    />
+        <result property="payAcount"    column="pay_acount"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="signStatus"    column="sign_status"    />
+    </resultMap>
+
+    <sql id="selectTrainPaymentVo">
+        select id, student_id, student_name, course_name, course_price, pay_name, pay_acount, pay_status, sign_status from train_payment
+    </sql>
+
+    <select id="selectTrainPaymentList" parameterType="TrainPayment" resultMap="TrainPaymentResult">
+        <include refid="selectTrainPaymentVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="payStatus != null "> and pay_status = #{payStatus}</if>
+            <if test="signStatus != null "> and sign_status = #{signStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainPaymentById" parameterType="Long" resultMap="TrainPaymentResult">
+        <include refid="selectTrainPaymentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTrainPayment" parameterType="TrainPayment">
+        insert into train_payment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="courseName != null">course_name,</if>
+            <if test="coursePrice != null">course_price,</if>
+            <if test="payName != null">pay_name,</if>
+            <if test="payAcount != null">pay_acount,</if>
+            <if test="payStatus != null">pay_status,</if>
+            <if test="signStatus != null">sign_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="courseName != null">#{courseName},</if>
+            <if test="coursePrice != null">#{coursePrice},</if>
+            <if test="payName != null">#{payName},</if>
+            <if test="payAcount != null">#{payAcount},</if>
+            <if test="payStatus != null">#{payStatus},</if>
+            <if test="signStatus != null">#{signStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainPayment" parameterType="TrainPayment">
+        update train_payment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="courseName != null">course_name = #{courseName},</if>
+            <if test="coursePrice != null">course_price = #{coursePrice},</if>
+            <if test="payName != null">pay_name = #{payName},</if>
+            <if test="payAcount != null">pay_acount = #{payAcount},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+            <if test="signStatus != null">sign_status = #{signStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTrainPaymentById" parameterType="Long">
+        delete from train_payment where id = #{id}
+    </delete>
+
+    <delete id="deleteTrainPaymentByIds" parameterType="String">
+        delete from train_payment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
